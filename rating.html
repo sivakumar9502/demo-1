@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rating and Review System</title>
+    <link rel="stylesheet" href="rating.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Rate Your Ride</h1>
+
+        <div class="rating">
+            <h2>Rating:</h2>
+            <div id="stars" class="star-rating">
+                <span class="star" data-value="1">&#9733;</span>
+                <span class="star" data-value="2">&#9733;</span>
+                <span class="star" data-value="3">&#9733;</span>
+                <span class="star" data-value="4">&#9733;</span>
+                <span class="star" data-value="5">&#9733;</span>
+            </div>
+            <p id="selected-rating" class="rating-display">You selected: 0 stars</p>
+        </div>
+
+        <div class="form-group">
+            <label for="review">Write your review:</label>
+            <textarea id="review" rows="4" placeholder="Enter your review here..."></textarea>
+        </div>
+
+        <button id="submit-review">Submit Review</button>
+
+        <div id="review-result" class="result" style="display: none;">
+            <h2>Your Review</h2>
+            <p id="result-message"></p>
+        </div>
+    </div>
+
+    <script>
+        const stars = document.querySelectorAll('.star');
+        let rating = 0;
+
+        stars.forEach(star => {
+            star.addEventListener('click', () => {
+                rating = star.getAttribute('data-value');
+                document.getElementById('selected-rating').innerText = "You selected: " + rating + " stars";
+                
+                stars.forEach(s => {
+                    s.classList.remove('selected');
+                    if (s.getAttribute('data-value') <= rating) {
+                        s.classList.add('selected');
+                    }
+                });
+            });
+        });
+
+        document.getElementById('submit-review').addEventListener('click', () => {
+            const reviewText = document.getElementById('review').value;
+
+            if (rating === 0) {
+                alert("Please select a rating.");
+                return;
+            }
+            if (!reviewText) {
+                alert("Please write your review.");
+                return;
+            }
+
+            // Here, you would typically send the rating and review to the server
+
+            document.getElementById('result-message').innerText = `Thank you for your review! You rated us ${rating} stars. Your feedback: "${reviewText}"`;
+            document.getElementById('review-result').style.display = 'block';
+            document.getElementById('review').value = ''; // Clear the review input
+            rating = 0; // Reset rating
+            document.getElementById('selected-rating').innerText = "You selected: 0 stars";
+            stars.forEach(s => s.classList.remove('selected')); // Clear selected stars
+        });
+    </script>
+</body>
+</html>

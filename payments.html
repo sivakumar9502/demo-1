@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Options</title>
+    <link rel="stylesheet" href="payments.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Select Payment Method</h1>
+
+        <div class="payment-option">
+            <label>
+                <input type="radio" name="payment-method" value="credit-card" checked>
+                Credit/Debit Card
+            </label>
+        </div>
+
+        <div class="payment-option">
+            <label>
+                <input type="radio" name="payment-method" value="paypal">
+                PayPal
+            </label>
+        </div>
+
+        <div class="payment-option">
+            <label>
+                <input type="radio" name="payment-method" value="cash">
+                Cash
+            </label>
+        </div>
+
+        <div id="card-details" class="payment-details">
+            <h2>Credit/Debit Card Details</h2>
+            <label for="card-number">Card Number</label>
+            <input type="text" id="card-number" placeholder="Enter card number">
+
+            <label for="expiry-date">Expiry Date (MM/YY)</label>
+            <input type="text" id="expiry-date" placeholder="MM/YY">
+
+            <label for="cvv">CVV</label>
+            <input type="text" id="cvv" placeholder="Enter CVV">
+        </div>
+
+        <a href="rating.html" class="button">pay now</a>
+
+        <div id="payment-result" class="result" style="display: none;">
+            <h2>Payment Result</h2>
+            <p id="result-message"></p>
+        </div>
+    </div>
+
+    <script>
+        // Show/Hide card details based on selected payment method
+        const paymentOptions = document.querySelectorAll('input[name="payment-method"]');
+        const cardDetails = document.getElementById('card-details');
+
+        paymentOptions.forEach(option => {
+            option.addEventListener('change', () => {
+                if (option.value === 'credit-card') {
+                    cardDetails.style.display = 'block';
+                } else {
+                    cardDetails.style.display = 'none';
+                }
+            });
+        });
+
+        // Handle payment button click
+        document.getElementById('pay-button').addEventListener('click', () => {
+            const selectedPaymentMethod = document.querySelector('input[name="payment-method"]:checked').value;
+            let resultMessage;
+
+            if (selectedPaymentMethod === 'credit-card') {
+                const cardNumber = document.getElementById('card-number').value;
+                const expiryDate = document.getElementById('expiry-date').value;
+                const cvv = document.getElementById('cvv').value;
+
+                // Basic validation (more comprehensive validation needed in production)
+                if (!cardNumber || !expiryDate || !cvv) {
+                    resultMessage = "Please enter valid card details.";
+                } else {
+                    // Simulate successful payment process
+                    resultMessage = "Payment of $10.00 successful using Credit/Debit Card!";
+                }
+            } else if (selectedPaymentMethod === 'paypal') {
+                // Simulate PayPal payment
+                resultMessage = "Redirecting to PayPal for payment...";
+            } else {
+                resultMessage = "Payment will be made in cash.";
+            }
+
+            document.getElementById('result-message').innerText = resultMessage;
+            document.getElementById('payment-result').style.display = 'block';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Real-Time Tracking</title>
+    <link rel="stylesheet" href="realtime.css">
+    <script src="https://maps.googleapis.com/maps/api/js?key=YOUR_API_KEY"></script>
+</head>
+<body>
+    <div class="container">
+        <h1>Real-Time Rider Tracking</h1>
+        <div id="map"></div>
+        <a href="payments.html" class="button">payments</a>
+    
+    </div>
+
+    <script>
+        let map;
+        let marker;
+        let watchID;
+
+        function initMap() {
+            // Initialize the map centered at a default location
+            const defaultLocation = { lat: 37.7749, lng: -122.4194 }; // San Francisco
+            map = new google.maps.Map(document.getElementById("map"), {
+                zoom: 15,
+                center: defaultLocation,
+            });
+            marker = new google.maps.Marker({
+                position: defaultLocation,
+                map: map,
+                title: "Your Location",
+            });
+        }
+
+        function startTracking() {
+            if (navigator.geolocation) {
+                watchID = navigator.geolocation.watchPosition(updateLocation, handleError, {
+                    enableHighAccuracy: true,
+                });
+                document.getElementById("start-tracking").style.display = "none";
+                document.getElementById("stop-tracking").style.display = "inline";
+            } else {
+                alert("Geolocation is not supported by this browser.");
+            }
+        }
+
+        function stopTracking() {
+            navigator.geolocation.clearWatch(watchID);
+            document.getElementById("stop-tracking").style.display = "none";
+            document.getElementById("start-tracking").style.display = "inline";
+        }
+
+        function updateLocation(position) {
+            const lat = position.coords.latitude;
+            const lng = position.coords.longitude;
+            const newPos = { lat: lat, lng: lng };
+
+            marker.setPosition(newPos);
+            map.setCenter(newPos);
+        }
+
+        function handleError(error) {
+            console.error("Error occurred. Error code: " + error.code);
+        }
+
+        document.getElementById("start-tracking").addEventListener("click", startTracking);
+        document.getElementById("stop-tracking").addEventListener("click", stopTracking);
+
+        // Initialize the map on page load
+        window.onload = initMap;
+    </script>
+</body>
+</html>
